@@ -31,6 +31,9 @@ Usuario.init({
     modelName: 'Usuario',
     tableName: 'usuarios',
     timestamps: true,
+    defaultScope: {
+        attributes: { exclude: ['senha'] },
+    }
 });
 
 module.exports = Usuario;

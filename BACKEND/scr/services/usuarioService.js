@@ -37,4 +37,4 @@ module.exports = { obterTodosUsuario,
     criarUsuario,
     atualizarUsuario,
     deletarUsuario
- };
+};

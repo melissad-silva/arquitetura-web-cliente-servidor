@@ -9,5 +9,13 @@ router.post('/', usuarioController.criarUsuario);
 router.put('/:id', usuarioController.atualizarUsuario);
 router.delete('/:id', usuarioController.deletarUsuario);
 
+/*rotas no postman:
+1. router.get('/'): http://localhost:3000/usuarios
+2. router.get('/:id'): http://localhost:3000/usuarios/1
+3. router.post('/'): http://localhost:3000/usuarios
+4. router.put('/:id'): http://localhost:3000/usuarios/1
+5. router.delete('/:id'): http://localhost:3000/usuarios/1
+*/
+
 
 module.exports = router;
