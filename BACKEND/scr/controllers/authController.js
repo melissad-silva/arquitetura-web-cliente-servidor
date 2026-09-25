@@ -2,7 +2,7 @@ const authService = require('../services/authService');
 
 const login = async (req, res) => {
     try {
-        const { email, senha } = req.body;
+        const { email, senha } = req.body || {};
 
         if (!email || !senha) {
             return res.status(400).json({ error: 'Erro, email e senha são obrigatórios...' });
@@ -15,6 +15,9 @@ const login = async (req, res) => {
         if (error.message === 'CREDENCIAIS_INVALIDAS') {
             return res.status(401).json({ error: 'Email ou senha inválidos' });
         }
+        console.error('Erro no login:', error);
         return res.status(500).json({ error: 'Erro interno no login' });
     }
 };
+
+module.exports = { login };

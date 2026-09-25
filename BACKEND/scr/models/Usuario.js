@@ -33,6 +33,11 @@ Usuario.init({
     timestamps: true,
     defaultScope: {
         attributes: { exclude: ['senha'] },
+    },
+    scopes: {
+        comSenha: {
+            attributes: {include: ['senha']},
+        }
     }
 });
 
