@@ -4,7 +4,7 @@ const usuarioController = require('../controllers/usuarioController');
 const { autenticar } = require('../middlewares/authMiddleware');
 
 router.post('/', usuarioController.criarUsuario);
-router.get('/', autenticar, usuarioController.buscarUsuario);
+router.get('/', usuarioController.buscarUsuario);
 router.get('/:id', autenticar, usuarioController.buscarUsuarios);
 router.put('/:id', autenticar, usuarioController.atualizarUsuario);
 router.delete('/:id', autenticar, usuarioController.deletarUsuario);
