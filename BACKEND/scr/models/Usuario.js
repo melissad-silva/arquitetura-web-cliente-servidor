@@ -20,7 +20,17 @@ Usuario.init({
     },
     senha: {
         type: DataTypes.STRING,
+        allowNull: true, // agr opcional, login pelo google n precisa de senha
+    },
+    googleId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+    },
+    perfil: {
+        type: DataTypes.STRING,
         allowNull: false,
+        defaultValue: 'admin',
     },
     foto: {
         type: DataTypes.TEXT('long'),

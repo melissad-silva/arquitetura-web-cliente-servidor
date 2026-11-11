@@ -19,4 +19,12 @@ const autenticar = (req, res, next) => {
     }
 };
 
-module.exports = { autenticar };
+const autorizar = (...perfisPermitidos) => (req, res, next) => {
+    if (!req.usuario || !perfisPermitidos.includes(req.usuario.perfil)) {
+        return res.status(403).json({ error: 'Acesso negado' });
+    }
+
+    return next();
+};
+
+module.exports = { autenticar, autorizar };

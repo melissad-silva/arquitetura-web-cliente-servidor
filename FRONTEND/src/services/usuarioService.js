@@ -27,3 +27,13 @@ export const deleteUsuario = async (id) => {
     return response.data;
 };
 
+export const uploadFotoUsuario = async (id,arquivo) => {
+    const formData = new FormData();
+    formData.append('foto', arquivo);
+    const res = await api.put(`/usuarios/${id}/foto`, formData);
+    return res.data;
+};
+
+export const removerFotoUsuario = async (id) => {
+    await api.delete(`/usuarios/${id}/foto`);
+};

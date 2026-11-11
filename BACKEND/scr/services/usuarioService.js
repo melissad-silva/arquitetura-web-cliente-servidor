@@ -1,4 +1,5 @@
 const Usuario = require('../models/Usuario');
+const storageService = require('./storageService');
 
 const obterTodosUsuario = async () => {
     return await Usuario.findAll();
@@ -32,9 +33,29 @@ const deletarUsuario = async (id) => {
     return usuario;
 };
 
+const editarFotoUsuario = async (id, foto) => {
+    const usuario = await obterUsuarioPorId(id);
+    if (!usuario) return null;
+    const fotoAntiga = usuario.foto;
+    const chave = await storageService.enviarArquivo(foto.buffer, foto.mimetype, `usuarios/${id}`);
+    await usuario.update({ foto: chave });
+    await storageService.deletarArquivo(fotoAntiga);
+    return await paraResposta(usuario);
+};
+
+const paraResposta = async (usuario) => {
+    if (!usuario) return usuario;
+    const dados = usuario.toJSON();
+    dados.foto = await storageService.gerarLink(dados.foto);
+    return dados;
+}
+
+
 module.exports = { obterTodosUsuario,
     obterUsuarioPorId,
     criarUsuario,
     atualizarUsuario,
-    deletarUsuario
+    deletarUsuario,
+    editarFotoUsuario,
+    paraResposta
 };

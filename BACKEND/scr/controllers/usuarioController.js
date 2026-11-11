@@ -1,11 +1,13 @@
 const usuarioService = require('../services/usuarioService');
 const bcrypt = require('bcrypt');
+const storageService = require('../services/storageService');
 
 
 const buscarUsuario = async (req, res) => {
     try {
-        const Usuario = await usuarioService.obterTodosUsuario();
-        res.status(200).json({data: Usuario});
+        const usuarios = await usuarioService.obterTodosUsuario();
+        const dados = await Promise.all(usuarios.map((usuario) => usuarioService.paraResposta(usuario)));
+        res.status(200).json({data: dados});
     } catch (error) {
         res.status(500).json({ error: 'Erro ao buscar usuarios' });
     }
@@ -18,7 +20,7 @@ const buscarUsuarios = async (req, res) => {
         if (!usuario) {
             return res.status(404).json({error: 'Erro, usuario nao encontrado...'})
         }
-        res.status(200).json(usuario)
+        res.status(200).json(await usuarioService.paraResposta(usuario))
     } catch (error) {
         res.status(500).json({error: 'Erro interno ao buscar usuario..'})
     }
@@ -69,11 +71,40 @@ const deletarUsuario = async (req, res) => {
     }   
 };
 
+const atualizarFotoUsuario = async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'Selecione uma imagem.' });
+    }
+    try {
+        const usuario = await usuarioService.editarFotoUsuario(req.params.id, req.file);
+        if (!usuario) return res.status(404).json({ error: 'Erro, usuario nao encontrado...' });
+        return res.status(200).json(usuario);
+    } catch (error) {
+        console.error('Erro ao atualizar foto do usuario:', error);
+        return res.status(500).json({ error: 'Erro interno ao atualizar foto do usuario...' });
+    }
+};
+
+const deletarFotoUsuario = async (req, res) => {
+    try {
+        const usuario = await usuarioService.obterUsuarioPorId(req.params.id);
+        if (!usuario) return res.status(404).json({ error: 'Erro, usuario nao encontrado...' });
+        await storageService.deletarArquivo(usuario.foto);
+        await usuario.update({ foto: null });
+        return res.status(204).send();
+    } catch (error) {
+        console.error('Erro ao deletar foto do usuario:', error);
+        return res.status(500).json({ error: 'Erro interno ao deletar foto do usuario...' });
+    }
+};
+
 
 module.exports = {
     buscarUsuario,
     buscarUsuarios,
     criarUsuario,
     atualizarUsuario,
-    deletarUsuario
+    deletarUsuario,
+    atualizarFotoUsuario,
+    deletarFotoUsuario,
 };
