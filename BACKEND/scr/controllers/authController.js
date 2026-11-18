@@ -2,9 +2,10 @@ const authService = require('../services/authService');
 
 const login = async (req, res) => {
     try {
-        const { email, senha } = req.body || {};
+        const { email } = req.body || {};
+        const senha = req.body?.senha ?? req.body?.password;
 
-        if (!email || !senha) {
+        if (!email || typeof senha !== 'string' || !senha.trim()) {
             return res.status(400).json({ error: 'Erro, email e senha são obrigatórios...' });
         }
 
